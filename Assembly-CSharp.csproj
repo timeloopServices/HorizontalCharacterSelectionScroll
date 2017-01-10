@@ -45,7 +45,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\HSManager.cs" />
      <Compile Include="Assets\Scripts\HorizontalScrollManager.cs" />
      <Compile Include="Assets\Scripts\ScrollElement.cs" />
  <Reference Include="UnityEngine.UI">
