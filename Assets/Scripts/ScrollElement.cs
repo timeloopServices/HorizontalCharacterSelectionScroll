@@ -6,7 +6,8 @@ namespace HorizontalScroll
 	
 	public class ScrollElement : MonoBehaviour
 	{
-
+		[SerializeField]
+		private ScrollElementInfo myInfo;
 
 	}
 
@@ -15,6 +16,7 @@ namespace HorizontalScroll
 	{
 		public int ElementId = -1;
 		public string ElementName = string.Empty;
+		public string SpriteResourcePath = string.Empty;
 	}
 
 }
