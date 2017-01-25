@@ -11,32 +11,58 @@ namespace HorizontalScroll
 		public GameObject ScrollParent;
 		public List<ScrollElementInfo> ListOfElementInfo;
 
-		private List<GameObject> ListOfScrollObjects;
+		private List<ScrollElement> ListOfScrollObjects;
+		private float scaleFactor;
+		private float centerPositionX;
+
+		public float GetScaleFactor() {
+			return scaleFactor;
+		}
+
+		public float GetCenterPositionX() {
+			return centerPositionX;
+		}
 
 		private void Start() {
-			ListOfScrollObjects = new List<GameObject> ();
+			InitializeHorizontalScroll ();
+			StartCoroutine (SetCenterPosition ());
+		}
+
+		private void InitializeHorizontalScroll() {
+
+			scaleFactor = ScrollParent.GetComponentInParent<Canvas> ().scaleFactor;
+			ListOfScrollObjects = new List<ScrollElement> ();
 
 			foreach (ScrollElementInfo elementInfo in ListOfElementInfo) {
 				print("****************Element "+elementInfo.ElementId+" *******************");
 				print ("Element Name :: " + elementInfo.ElementName);
 				print ("Sprite Path :: " + elementInfo.SpriteResourcePath);
 
-				GameObject scrollElement = Instantiate (ElementPrefab);
-				scrollElement.transform.SetParent(ScrollParent.transform,false);
-				//scrollElement.transform.localScale = Vector3.one;
+				GameObject scrollElementGO = Instantiate (ElementPrefab);
+
+				//set information
+				ScrollElement scrollElement = scrollElementGO.GetComponent<ScrollElement>();
+				scrollElement.SetElement(this,elementInfo);
+
+				//set parent
+				scrollElementGO.transform.SetParent(ScrollParent.transform,false);
 
 				//assign text
-				scrollElement.GetComponentInChildren<Text> ().text = elementInfo.ElementName;
+				scrollElementGO.GetComponentInChildren<Text> ().text = elementInfo.ElementName;
 
 				//assign Image
 				Sprite loadedSprite = Resources.Load<Sprite>(elementInfo.SpriteResourcePath);
-				scrollElement.GetComponentInChildren<Button> ().gameObject.GetComponent<Image> ().sprite = loadedSprite;
+				scrollElementGO.GetComponentInChildren<Button> ().gameObject.GetComponent<Image> ().sprite = loadedSprite;
 
 				ListOfScrollObjects.Add (scrollElement);
 
-
 			}
+				
 		}
 
+		private IEnumerator SetCenterPosition() {
+			yield return new WaitForEndOfFrame ();
+			centerPositionX = ListOfScrollObjects [0].gameObject.transform.position.x;
+		}
 	}
 }
