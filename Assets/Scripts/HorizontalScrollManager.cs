@@ -7,6 +7,8 @@ namespace HorizontalScroll
 {
 	public class HorizontalScrollManager : MonoBehaviour
 	{
+		private const float SCROLLBUFFER = 100.0f;
+
 		public GameObject ElementPrefab;
 		public GameObject ScrollParent;
 		public List<ScrollElementInfo> ListOfElementInfo;
@@ -14,6 +16,9 @@ namespace HorizontalScroll
 		private List<ScrollElement> ListOfScrollObjects;
 		private float scaleFactor;
 		private float centerPositionX;
+		private float leftLimitX;
+		private float rightLimitX;
+		private float bufferX;
 
 		public float GetScaleFactor() {
 			return scaleFactor;
@@ -23,8 +28,17 @@ namespace HorizontalScroll
 			return centerPositionX;
 		}
 
+		public float GetLeftLimit() {
+			return leftLimitX;
+		}
+
+		public float GetRightLimit() {
+			return rightLimitX;
+		}
+
 		private void Start() {
 			InitializeHorizontalScroll ();
+			bufferX = SCROLLBUFFER * scaleFactor;	
 			StartCoroutine (SetCenterPosition ());
 		}
 
@@ -62,7 +76,8 @@ namespace HorizontalScroll
 
 		private IEnumerator SetCenterPosition() {
 			yield return new WaitForEndOfFrame ();
-			centerPositionX = ListOfScrollObjects [0].gameObject.transform.position.x;
-		}
+			centerPositionX = ListOfScrollObjects [0].gameObject.transform.TransformPoint (ListOfScrollObjects [0].gameObject.transform.position).x;
+			leftLimitX = centerPositionX - bufferX;
+			rightLimitX = centerPositionX + bufferX;}
 	}
 }

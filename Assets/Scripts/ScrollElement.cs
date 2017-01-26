@@ -11,9 +11,22 @@ namespace HorizontalScroll
 		private ScrollElementInfo myInfo;
 		private HorizontalScrollManager scrollManager;
 
+		private void Start() {
+
+		}
+
 		private void Update() 
 		{
 			//Debug.Log (myInfo.ElementId + " PositionX :: " +gameObject.transform.position.x);
+
+			float myPosX = transform.TransformPoint (transform.position).x;
+
+			//print ("positionX :: "+myPosX+" leftlimit :: "+leftLimit+" rightlimit :: "+rightLimit);
+			//print("Id : "+myInfo.ElementId+" "+transform.TransformVector(transform.position).x);
+			if (myPosX >= scrollManager.GetLeftLimit() && myPosX <= scrollManager.GetRightLimit()) {
+				Debug.Log (myInfo.ElementId +" Element in center");
+			}
+
 		}
 
 		public void SetElement(HorizontalScrollManager scrollManager,ScrollElementInfo info) {
