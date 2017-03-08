@@ -10,9 +10,18 @@ namespace HorizontalScroll
 		[SerializeField]
 		private ScrollElementInfo myInfo;
 		private HorizontalScrollManager scrollManager;
+		private RectTransform parentRactTransform;
+		private bool startChecking;
 
 		private void Start() {
+			parentRactTransform = GetComponentInParent<HorizontalLayoutGroup> ().gameObject.GetComponent<RectTransform>();
+			startChecking = false;
+			StartCoroutine (startDelay ());
+		}
 
+		IEnumerator startDelay() {
+			yield return new WaitForSeconds(0.1f);
+			startChecking = true;
 		}
 
 		private void Update() 
@@ -23,8 +32,9 @@ namespace HorizontalScroll
 
 			//print ("positionX :: "+myPosX+" leftlimit :: "+leftLimit+" rightlimit :: "+rightLimit);
 			//print("Id : "+myInfo.ElementId+" "+transform.TransformVector(transform.position).x);
-			if (myPosX >= scrollManager.GetLeftLimit() && myPosX <= scrollManager.GetRightLimit()) {
-				Debug.Log (myInfo.ElementId +" Element in center");
+			if (myPosX >= scrollManager.GetLeftLimit() && myPosX <= scrollManager.GetRightLimit() && Input.GetMouseButtonUp(0)) {
+				
+				scrollManager.ElementCameInCenter (myInfo.ElementId);
 			}
 
 		}
